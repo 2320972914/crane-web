@@ -53,13 +53,13 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+// import { validUsername } from '@/utils/validate'
 
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
+      if (!validateUsername) {
         callback(new Error('Please enter the correct user name'))
       } else {
         callback()
@@ -74,12 +74,14 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: 'admin1',
+        password: '123456',
+        userType: '00'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        userType: [{ required: true }]
       },
       loading: false,
       passwordType: 'password',
@@ -109,12 +111,14 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' }).catch(() => {})
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              console.log('跳转')
+              this.$router.push({ path: this.redirect || '/' }).catch(() => {})
+              this.loading = false
+            }).catch(() => {
+              this.loading = false
+            })
         } else {
           console.log('error submit!!')
           return false

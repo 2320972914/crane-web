@@ -5,11 +5,11 @@
         <div class="tool-list">
           <div class="conditions">
             <span class="title">姓名</span>
-            <el-input v-model="searchForm.username" placeholder="请输入姓名" />
+            <el-input v-model="searchForm.name" placeholder="请输入规格" />
           </div>
           <div class="conditions">
             <span class="title">手机号</span>
-            <el-input v-model="searchForm.phone" placeholder="请输入手机号" />
+            <el-input v-model="searchForm.phone" placeholder="请输入编号" />
           </div>
           <div class="conditions">
             <el-button size="medium" type="primary" @click="search">搜索</el-button>
@@ -27,15 +27,15 @@
         style="width: 100%;margin-bottom: 20px;"
         empty-text="暂无数据"
       >
-        <el-table-column prop="username" label="账号" width="150" />
-        <el-table-column prop="nickName" label="姓名" />
+        <el-table-column prop="account" label="账号" width="150" />
+        <el-table-column prop="name" label="姓名" />
         <el-table-column prop="sex" label="性别" />
         <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="authName" label="权限名" />
-        <el-table-column prop="idCard" label="身份证号" />
-        <el-table-column prop="isEnable" label="状态" :formatter="isEnableWord" />
-        <el-table-column prop="userType" label="用户类型" :formatter="userTypeWord" />
-        <!-- <el-table-column fixed="right" label="操作" width="200">
+        <el-table-column prop="auth_name" label="权限名" />
+        <el-table-column prop="id_card" label="身份证号" />
+        <el-table-column prop="is_enable" label="状态" :formatter="statusWord" />
+        <el-table-column prop="user_type" label="用户类型" />
+        <el-table-column fixed="right" label="操作" width="250">
           <template slot-scope="scope">
             <el-button
               type="text"
@@ -55,13 +55,13 @@
               @click="deleteAuth(row)"
             >删除</el-button>
           </template>
-        </el-table-column> -->
+        </el-table-column>
       </el-table>
       <div v-if="total > 10" class="pagination">
         <el-pagination
           background
-          :page-size="searchForm.pageSize"
-          :current-page="searchForm.pageNo"
+          :page-size="search.pageSize"
+          :current-page="search.pageNo"
           layout="total, sizes, prev, pager, next, jumper"
           :page-sizes="[10, 20, 30, 50]"
           :total="total"
@@ -70,7 +70,7 @@
         />
       </div>
     </div>
-    <!-- <div class="addDiaog">
+    <div class="addDiaog">
       <el-dialog
         class="midDiaLog"
         :title="title"
@@ -84,12 +84,12 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'UserManages',
+  name: 'CraneInfoManages',
   components: {},
   props: {},
   data() {
@@ -97,104 +97,37 @@ export default {
       searchForm: {
         pageSize: 10,
         pageNo: 1,
-        username: '',
+        name: '',
         phone: ''
       },
-      tableData: [],
       dialogFormVisible: false,
       total: 0,
       title: '添加用户',
       userForm: {
 
-      },
-      isEnableList: [
-        {
-          code: 0,
-          value: '启用'
-        },
-        {
-          code: 1,
-          value: '停用'
-        }
-      ],
-      userTypeList: [
-        {
-          code: '00',
-          value: '系统用户'
-        },
-        {
-          code: '01',
-          value: '管理端用户'
-        },
-        {
-          code: '02',
-          value: '手机端用户'
-        }
-      ]
+      }
     }
   },
   computed: {},
   watch: {},
   created() {},
-  mounted() {
-    this.search()
-  },
+  mounted() {},
   methods: {
     // 搜索
     search() {
-      this.searchForm.pageNo = 1
-      this.getUserList()
+
     },
     // 重置
     reset() {
-      this.searchForm = {
-        pageSize: 10,
-        pageNo: 1,
-        username: '',
-        phone: ''
-      }
-    },
-    // 分页搜素
-    changePage(page) {
-      this.searchForm.pageNo = page
-      this.getUserList()
-    },
-    // 分页
-    handleSizeChange(val) {
-      this.searchForm.pageSize = val
-      this.getUserList()
+
     },
     // 获取用户列表
     getUserList() {
-      this.$store.dispatch('basicManages/getUserList', this.searchForm)
-        .then(res => {
-          this.tableData = res.rows
-          this.total = res.total
-        })
-        .catch(() => {})
+
     },
     // 添加弹窗
     showAdd() {
 
-    },
-    // 状态转文字
-    isEnableWord(rows) {
-      var result = ''
-      this.isEnableList.map(res => {
-        if (res.code == rows.isEnable) {
-          result = res.value
-        }
-      })
-      return result
-    },
-    userTypeWord(rows) {
-      var result = ''
-      this.userTypeList.map(res => {
-        if (res.code == rows.isEnable) {
-          result = res.value
-        }
-      })
-      return result
     }
   }
 }

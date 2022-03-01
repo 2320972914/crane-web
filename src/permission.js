@@ -24,9 +24,10 @@ router.beforeEach(async(to, from, next) => {
     if (to.path === '/login') {
       next({ path: '/' })
     } else {
-      if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
-        store.dispatch('user/getInfo').then(res => { // 拉取info
-          const roles = res.roles
+      if (!store.getters.roles) { // 判断当前用户是否已拉取完user_info信息
+        const username = localStorage.getItem('username')
+        store.dispatch('user/getInfo', { username: username }).then(res => { // 拉取info
+          const roles = store.getters.roles
           console.log(roles)
           store.dispatch('permissions/generateRoutes', roles).then(() => { // 生成可访问的路由表
             console.log(store.getters.addRoutes)

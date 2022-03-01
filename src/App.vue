@@ -14,6 +14,19 @@ export default {
   min-width: 1000px;
   background-color: #f0f2f5;
 }
+
+.el-table tbody tr {
+  background-color: #fff !important;
+}
+.el-table tbody td {
+  text-align: center !important;
+}
+.el-table th,
+.el-table tr {
+  background-color: #f5f7fa !important;
+  text-align: center !important;
+}
+
 .contents{
   padding: 20px;
   .top{
@@ -23,8 +36,13 @@ export default {
   .table{
     margin-top:20px;
   }
-  .search {
-    .search-list {
+  .title {
+    color: rgba(0, 0, 0, 0.85);
+    font-size: 14px;
+    margin-right: 5px;
+  }
+  .tool {
+    .tool-list {
       position: relative;
       top: 5px;
       margin-right: 20px;
@@ -63,41 +81,64 @@ export default {
     }
   }
   .table {
-  margin-top: 20px;
-  padding: 20px;
-  background-color: #fff;
-  ::v-deep thead{
-    ::v-deep .cell{
-      text-align: center;
-    }
-  }
-  .el-table__row {
-    .cell {
-      font-size: 14px;
-      color: rgba(0, 0, 0, 0.65);
-    }
-    .el-button--text {
-      font-size: 14px;
-      color: #1890ff;
-    }
-  }
-  .pagination {
-    text-align: center;
-    ::v-deep .btn-prev,
-    .btn-next {
-      background-color: #fff !important;
-    }
-    ::v-deep .el-pager {
-      li {
-        background-color: #fff !important;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    ::v-deep thead{
+      ::v-deep .cell{
+        text-align: center;
       }
     }
-    .el-pager li:not(.disabled).active {
-      background-color: #fff !important;
-      color: #409eff !important;
-      border: 1px solid #409eff !important;
+    .el-table__row {
+      .cell {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .el-button--text {
+        font-size: 14px;
+        color: #1890ff;
+      }
+    }
+    .pagination {
+      text-align: center;
+      ::v-deep .btn-prev,
+      .btn-next {
+        background-color: #fff !important;
+      }
+      ::v-deep .el-pager {
+        li {
+          background-color: #fff !important;
+        }
+      }
+      .el-pager li:not(.disabled).active {
+        background-color: #fff !important;
+        color: #409eff !important;
+        border: 1px solid #409eff !important;
+      }
     }
   }
-}
+  .minDialog {
+      width: 400px !important;
+      margin: auto;
+      .el-input{
+        width: 200px !important;
+      }
+    }
+
+  .midDialog{
+    width: 600px !important;
+    margin: auto;
+     .el-input{
+        width: 300px !important;
+      }
+  }
+  .bigDialog{
+    width: 800px;
+    margin: auto;
+  }
+  .wl-transfer .transfer-title {
+    margin: 0;
+  }
+
 }
 </style>
