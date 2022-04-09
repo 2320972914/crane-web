@@ -42,7 +42,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -50,11 +49,10 @@ export const constantRoutes = [
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
-
       component: () => import('@/views/dashboard/index'),
       meta:
       {
-        title: 'Dashboard',
+        title: '首页',
         icon: 'dashboard',
         affix: true // 如果设置为true，它则会固定在tags-view中(默认 false)
       }
@@ -65,41 +63,8 @@ export const constantRoutes = [
 // 异步加载的路由
 export const asyncRoutes = [
   {
-    path: '/permission',
-    // redirect: '/permission/authInfo',
-    alwaysShow: true,
-    component: Layout,
-    name: 'Permission',
-    meta: {
-      title: '权限',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
-    },
-    children: [
-      {
-        path: 'authInfo',
-        component: () => import('@/views/permission/authInfo'),
-        name: 'Authinfo',
-        meta: {
-          title: '权限信息',
-          roles: ['admin', 'editor'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'authManage',
-        component: () => import('@/views/permission/authManage'),
-        name: 'AuthManage',
-        meta: {
-          title: '权限管理',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
-  {
     path: '/basicManages',
     component: Layout,
-    alwaysShow: true,
     name: 'BasicManages',
     meta: {
       title: '基础管理',
@@ -112,7 +77,7 @@ export const asyncRoutes = [
         component: () => import('@/views/basicManages/authManages'),
         name: 'AuthManages',
         meta: {
-          title: '权限管理',
+          title: '权限角色管理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -131,6 +96,37 @@ export const asyncRoutes = [
         name: 'UserManages',
         meta: {
           title: '用户管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  {
+    path: '/permission',
+    alwaysShow: true,
+    component: Layout,
+    name: 'Permission',
+    meta: {
+      title: '权限',
+      icon: 'lock',
+      roles: ['admin', 'user'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'authInfo',
+        component: () => import('@/views/permission/authInfo'),
+        name: 'Authinfo',
+        meta: {
+          title: '权限信息',
+          roles: ['admin', 'user'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'authManage',
+        component: () => import('@/views/permission/authManage'),
+        name: 'AuthManage',
+        meta: {
+          title: '权限管理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       }

@@ -19,12 +19,12 @@ export default {
   background-color: #fff !important;
 }
 .el-table tbody td {
-  text-align: center !important;
+  // text-align: center !important;
 }
 .el-table th,
 .el-table tr {
   background-color: #f5f7fa !important;
-  text-align: center !important;
+  // text-align: center !important;
 }
 
 .contents{
@@ -138,6 +138,10 @@ export default {
   }
   .wl-transfer .transfer-title {
     margin: 0;
+  }
+  .dialogButtom{
+    margin:20px auto 0;
+    width: 200px;
   }
 
 }

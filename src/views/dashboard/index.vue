@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">{{ name }} 欢迎来到吊车租赁管理平台！</div>
   </div>
 </template>
 

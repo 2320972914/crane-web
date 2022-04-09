@@ -29,7 +29,7 @@ router.beforeEach(async(to, from, next) => {
         store.dispatch('user/getInfo', { username: username }).then(res => { // 拉取info
           const roles = store.getters.roles
           console.log(roles)
-          store.dispatch('permissions/generateRoutes', roles).then(() => { // 生成可访问的路由表
+          store.dispatch('permissions/getMenu', roles).then(() => { // 生成可访问的路由表
             console.log(store.getters.addRoutes)
             router.addRoutes(store.getters.addRoutes) // 动态添加可访问路由表
             // console.log(router)
@@ -37,6 +37,8 @@ router.beforeEach(async(to, from, next) => {
           })
         }).catch(err => {
           console.log(err)
+          store.dispatch('user/logout')
+          // next(`/login?redirect=${to.path}`)
         })
       } else {
         next() // 当有用户权限的时候，说明所有可访问路由已生成 如访问没权限的全面会自动进入404页面

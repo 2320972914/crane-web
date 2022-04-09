@@ -7,6 +7,9 @@ import user from './modules/user'
 import permissions from './modules/permissions'
 import tagsView from './modules/tagsView'
 import basicManages from './modules/basicManages'
+import craneManages from './modules/craneManages'
+import adManages from './modules/adManages'
+import orderManages from './modules/orderManages'
 
 Vue.use(Vuex)
 
@@ -17,7 +20,10 @@ const store = new Vuex.Store({
     user,
     permissions,
     tagsView,
-    basicManages
+    basicManages,
+    craneManages,
+    adManages,
+    orderManages
   },
   getters
 })

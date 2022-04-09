@@ -1,4 +1,7 @@
 import { asyncRoutes, constantRoutes, errorRoutes } from '@/router'
+import { getRouterList } from '@/api/basicManages'
+import Layout from '@/layout'
+import { loadView } from '@/router/loadView'
 
 // 权限拦截、
 
@@ -63,6 +66,46 @@ const actions = {
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)
     })
+  },
+  getMenu({ commit, state }, roles) {
+    return new Promise((resolve, reject) => {
+      getRouterList()
+        .then(res => {
+          const newRouter = []
+          refactoringTree(newRouter, res.rows)
+          console.log(newRouter)
+          const accessedRoutes = filterAsyncRoutes(newRouter, roles)
+          console.log(accessedRoutes)
+          commit('SET_ROUTES', accessedRoutes)
+          resolve(newRouter)
+        })
+        .catch(error => {
+          reject(error)
+        })
+    })
+  }
+}
+function refactoringTree(oldTree, newTree) {
+  for (const obj of newTree) {
+    const newobj = {}
+    newobj.path = obj.path
+    newobj.name = obj.routerName
+    newobj.children = []
+    newobj.meta = {
+      title: obj.routerTitle,
+      icon: obj.icon ? 'el-icon-' + obj.icon : 'el-icon-s-help',
+      roles: obj.authType == 1 ? ['admin', 'user'] : ['admin']
+    }
+    if (obj.parentId == 0) {
+      newobj.component = Layout
+    } else {
+      newobj.component = loadView(obj.path)
+    }
+    if (obj.children.length > 0) {
+      refactoringTree(newobj.children, obj.children)
+      // newobj.redirect = '/' + obj.children[0].sourceUrl
+    }
+    oldTree.push(newobj)
   }
 }
 

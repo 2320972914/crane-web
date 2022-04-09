@@ -29,13 +29,13 @@
               v-if="scope.row.status != 2"
               type="text"
               size="small"
-              @click="enabled(row)"
+              @click="enabled(scope.row)"
             >{{ scope.row.status==1?"启用":"停用" }}</el-button>
             <el-button
               v-if="scope.row.status != 2"
               type="text"
               size="small"
-              @click="deleteAuth(row)"
+              @click="deleteAuth(scope.row)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -55,8 +55,8 @@
     </div>
     <div class="addAuth">
       <el-dialog
-        title="新增权限"
-        :visible.sync="dialogFormVisible"
+        title="新增权限角色"
+        :visible.sync="addDialogFormVisible"
         :close-on-click-modal="false"
         :center="true"
         class="minDialog"
@@ -78,7 +78,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="addAuth()">添加</el-button>
-            <el-button @click="dialogFormVisible=false">取消</el-button>
+            <el-button @click="addDialogFormVisible=false">取消</el-button>
           </el-form-item>
         </el-form>
       </el-dialog>
@@ -87,7 +87,7 @@
       <el-dialog
         title="编辑权限"
         class="bigDialog"
-        :visible.sync="EditDialogFormVisible"
+        :visible.sync="editDialogFormVisible"
         :close-on-click-modal="false"
         :center="true"
       >
@@ -125,28 +125,22 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
-      total: 1,
-      dialogFormVisible: false,
-      EditDialogFormVisible: false,
+      total: 0,
+      addDialogFormVisible: false,
+      editDialogFormVisible: false,
       authForm: {
         authName: '',
         status: 0
       },
       rules: {
         authName: [
-          { required: true, message: '权限名称不能为空', trigger: 'change' }
+          { required: true, message: '权限名称不能为空', trigger: 'blur' }
         ],
         status: [
           { required: true, message: '状态不能为空', trigger: 'change' }
         ]
       },
-      tableData: [
-        {
-          authId: 1,
-          authName: 'superAdmin',
-          status: 0
-        }
-      ],
+      tableData: [],
       statusList: [
         {
           code: 0,
@@ -203,42 +197,96 @@ export default {
   computed: {},
   watch: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.getAuthList()
+  },
   methods: {
-    // 分页-翻页
-    changePage() {
-
+    // 分页搜素
+    changePage(page) {
+      this.searchForm.pageNo = page
+      this.getAuthList()
     },
-    // 分页-每页条数
-    handleSizeChange() {
-
+    // 分页
+    handleSizeChange(val) {
+      this.searchForm.pageSize = val
+      this.getAuthList()
     },
-    // 获取权限列表
-    getList() {
-
+    // 获取权限角色列表
+    getAuthList() {
+      this.$store.dispatch('basicManages/getAuthList', this.search)
+        .then((res) => {
+          this.tableData = res.rows
+          this.total = res.total
+        })
+        .catch(() => {})
     },
     // 新增弹窗
     showDialog() {
       this.$nextTick(() => {
         if (this.$refs['authForm'] !== undefined) { this.$refs['authForm'].resetFields() }
       })
-      this.dialogFormVisible = true
-    },
-    // 添加权限
-    addAuth() {
-
+      this.addDialogFormVisible = true
     },
     // 编辑弹窗
     showEdit(row) {
-      this.EditDialogFormVisible = true
+      this.editDialogFormVisible = true
+    },
+    // 编辑弹窗
+    showAdd(row) {
+      this.authForm.authName = ''
+      this.authForm.status = 0
+      this.addDialogFormVisible = true
+    },
+    // 添加权限
+    addAuth() {
+      this.$refs['authForm'].validate((valid) => {
+        if (valid) {
+          this.$store.dispatch('basicManages/addAuth', this.authForm)
+            .then((res) => {
+              this.getAuthList()
+              this.addDialogFormVisible = false
+              this.$message({
+                message: res.msg,
+                type: 'success',
+                duration: 2 * 1000
+              })
+            })
+            .catch(() => {})
+        }
+      })
+    },
+    add() {
+
+    },
+    remove() {
+
     },
     // 启用停用
     enabled(row) {
-
+      this.$store.dispatch('basicManages/changeAuthStatus', { authId: row.authId, status: row.status == 1 ? 0 : 1 })
+        .then((res) => {
+          this.addDialogFormVisible = false
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.getAuthList()
+        })
+        .catch(() => {})
     },
     // 删除
     deleteAuth(row) {
-
+      this.$store.dispatch('basicManages/deleteAuth', { authId: row.authId })
+        .then((res) => {
+          this.$message({
+            message: res.msg,
+            type: 'success',
+            duration: 2 * 1000
+          })
+          this.getAuthList()
+        })
+        .catch(() => {})
     },
     // 状态转文字
     statusWord(rows) {
@@ -258,9 +306,4 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
-.dialogButtom{
-  margin:20px auto 0;
-  width: 200px;
-}
-
 </style>

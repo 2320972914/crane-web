@@ -1,4 +1,5 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, upload } from '@/api/user'
+
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -55,11 +56,11 @@ const actions = {
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        const { username, headImgUrl, authName } = data
+        const { username, headImgUrl, authType } = data
         commit('SET_NAME', username)
         commit('SET_AVATAR', headImgUrl)
-        commit('SET_ROLES', authName)
-        console.log(authName)
+        commit('SET_ROLES', authType == 0 ? 'admin' : 'user')
+        // console.log(authName)
         // dispatch('permissions/generateRoutes', roles, { root: true })
         resolve(data)
       }).catch(error => {
@@ -82,6 +83,7 @@ const actions = {
       // })
       removeToken() // must remove  token  first
       resetRouter()
+      localStorage.clear()
       commit('RESET_STATE')
       resolve()
     })
@@ -93,6 +95,18 @@ const actions = {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+
+  upload({ commit, state }, params) {
+    return new Promise((resolve, reject) => {
+      upload(params)
+        .then(res => {
+          resolve(res)
+        })
+        .catch(error => {
+          reject(error)
+        })
     })
   }
 }
